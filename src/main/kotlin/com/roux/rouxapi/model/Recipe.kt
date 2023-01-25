@@ -13,6 +13,10 @@ data class Recipe (
         var description: String,
         var createdDate: LocalDateTime = LocalDateTime.now(),
         var modifiedDate: LocalDateTime = LocalDateTime.now(),
-
-
+        var tags: List<Tag>? = null,
+        var recipeTime: CookTime,
+        var ingredients: List<Ingredient>,
+        var supplies: List<Utensil>,
+        var directions: List<Direction>,
+        var cookStats: CookStats = CookStats(0, null)
 )
