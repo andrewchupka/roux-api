@@ -1,11 +1,10 @@
 package com.roux.rouxapi.controller
 
 import com.roux.rouxapi.model.Recipe
-import com.roux.rouxapi.model.requests.CreateRecipe
 import com.roux.rouxapi.model.requests.UpdateRecipe
+import com.roux.rouxapi.model.requests.UpdateTags
 import com.roux.rouxapi.repository.RecipeRepository
 import com.roux.rouxapi.util.mapUpdateRequestToRecipe
-import org.apache.coyote.Response
 import org.bson.types.ObjectId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -30,13 +29,8 @@ class RecipeController (
     }
 
     @PostMapping
-    fun createRecipe(@RequestBody request: CreateRecipe): ResponseEntity<Recipe> {
-        val recipe = recipesRepository.save(
-                Recipe (
-                        name = request.name,
-                        description = request.description
-                )
-        )
+    fun createRecipe(@RequestBody request: Recipe): ResponseEntity<Recipe> {
+        val recipe = recipesRepository.save(request)
         return ResponseEntity(recipe, HttpStatus.CREATED)
     }
 
@@ -44,6 +38,14 @@ class RecipeController (
     fun updateRecipe(@PathVariable id: String, @RequestBody request: UpdateRecipe): ResponseEntity<Recipe> {
         var recipe = recipesRepository.findOneById(ObjectId(id))
         recipe = mapUpdateRequestToRecipe(request, recipe)
+        recipesRepository.save(recipe)
+        return ResponseEntity.ok(recipe)
+    }
+
+    @PutMapping("/{id}/tags")
+    fun updateRecipeTags(@PathVariable id: String, @RequestBody request: UpdateTags): ResponseEntity<Recipe> {
+        var recipe = recipesRepository.findOneById(ObjectId(id))
+        recipe.tags = request.tags
         recipesRepository.save(recipe)
         return ResponseEntity.ok(recipe)
     }
