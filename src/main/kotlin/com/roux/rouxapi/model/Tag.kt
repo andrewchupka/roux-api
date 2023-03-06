@@ -3,7 +3,7 @@ package com.roux.rouxapi.model
 import org.bson.types.ObjectId
 
 data class Tag(
-    var id: ObjectId = ObjectId.get(),
+    val id: ObjectId = ObjectId.get(),
     var name: String
 ) {
 
